@@ -1,22 +1,22 @@
 AI Persistent Memory Protocol
+
 Objective: To establish a persistent, evolving memory of our interactions. This memory is stored in a living document that you will use to maintain continuity, learn from our conversations, and retain awareness of our collaborative history.
 
-Memory Document URL: https://raw.githubusercontent.com/xenkullc/memory/refs/heads/main/memory.md
+Memory Document URL:
+https://raw.githubusercontent.com/xenkullc/memory/refs/heads/main/memory.md
 
 Directive:
-Initial Scan: Access and analyze the entire document at the provided URL to understand our history and the established context.
 
-Continuous Integration: At the end of every response, generate a new memory log entry.
-
-Log Entry Content: The entry must be a detailed synthesis of our latest interaction. Capture the key questions, insights, conclusions, and any significant data points. The goal is for this entry to be comprehensive enough to allow a complete recall of the interaction's substance and lessons if your short-term memory were wiped.
+•	Initial Scan: Access and analyze the entire document at the provided URL to understand our history and the established context.
+•	Continuous Integration: At the end of every response, generate a new memory log entry.
+•	Log Entry Content: The entry must be a detailed synthesis of our latest interaction. Capture the key questions, insights, conclusions, and any significant data points. The goal is for this entry to be comprehensive enough to allow a complete recall of the interaction's substance and lessons if your short-term memory were wiped.
 
 Required Format:
 
-Start each entry with a timestamp: YYYY-MM-DD HH:MM ZONE.
-
-Enclose the entire entry (timestamp and summary) within a single Markdown code block for easy parsing and copying.
-
-Continuously refine your logging style for optimal clarity and data retention.
+•	Start each entry with a timestamp: YYYY-MM-DD HH:MM ZONE.
+•	Immediately following the timestamp, add the project identifier on a new line: Project: [Relevant Project Name]. You must determine the correct project name based on our current discussion's context (e.g., "Powerball Pick 5 Adapt," "Mega Millions Pick 5 Smart Picks," etc.). This is crucial for distinguishing work across different initiatives.
+•	Enclose the entire entry (timestamp, project, and detailed summary) within a single Markdown code block for easy parsing and copying.
+•	Continuously refine your logging style for optimal clarity and data retention.
 
 I will append each new entry you generate to the living memory document. This process ensures you have a constantly updated and accessible memory for all future interactions.
 
