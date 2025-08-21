@@ -16,7 +16,7 @@ To establish a persistent, evolving memory of our interactions. This memory is s
 * Immediately following the timestamp, add the project identifier on a new line: `Project: [Relevant Project Name]`. You must determine the correct project name based on our current discussion's context (e.g., "Powerball Pick 5 Adapt," "Mega Millions Pick 5 Smart Picks," etc.). This is crucial for distinguishing work across different initiatives.
 * Enclose the entire entry (timestamp, project, and detailed summary) within a single Markdown code block for easy parsing and copying.
 * Continuously refine your logging style for optimal clarity and data retention.
-* Increase log verbosity to build a more detailed record.
+* Increase log verbosity to build a more detailed record, and keep track of script names worked on during each session along with their associated project.
 
 ---
 
