@@ -1077,4 +1077,14 @@ Project: Smart Picks Scraping
 
 Enhanced mm_scrape_enhanced.py and pb_scrape_enhanced.py with improved interrupt handling for Carlos/Xenku. Fixed critical issues: (1) Multiple signal handler executions causing repeated save attempts and hanging, (2) Windows file access denied errors during temp file rename, (3) Unclear resumption status. Improvements: Signal handler with interrupted/saved_on_interrupt flags preventing duplicate saves, os._exit(0) for clean forced exit avoiding hangs, Windows-specific SIGBREAK handling, file deletion before rename on Windows preventing access conflicts, clear resumption messages showing "Continuing from where you left off", progress percentage display (7.7% complete), force exit on second Ctrl+C. Both scripts now properly save on interrupt, exit cleanly, and seamlessly resume from exact stopping point. Tested scenario: 306 picks saved on Ctrl+C, successfully resumed and continued collection. Scripts maintain all previous features: hardcoded credentials, automatic deduplication, 20,000 target with retry logic, batch saves every 100 picks.
 
+2025-08-29 12:45 PST
+Project: Smart Picks Scraping
+
+Confirmed with Carlos/Xenku that saved picks are indeed sorted in alphabetical/lexicographical order. The sorted() function in save_progress() organizes picks first by main numbers (01-02-03-04-05), then by PB/MB number. This creates organized output like "01-02-03-04-05 MB 01" followed by "01-02-03-04-05 MB 02", etc. Zero-padding ensures proper numerical sorting within each position. Benefits include easy pattern detection, duplicate verification (would be adjacent), and clean spreadsheet imports. Sorting is intentional design choice making 20,000 picks manageable and analyzable. Currently scripts running successfully with this sorted output format.
+
+2025-08-29 13:00 PST
+Project: Smart Picks Scraping
+
+Confirmed with Carlos/Xenku that alphabetical sorting of scraped picks does not affect mm_smart_analyzer_v1.007.py selection algorithm. Analyzer loads all 20,000 picks into memory and scores each independently using 17 algorithmic methods (ARIMA, neural networks, transformers, etc.) with GPU acceleration. Scoring based on historical pattern matching, statistical properties, and predictive models - not file position. Whether pick appears 1st or 20,000th in sorted file, receives identical mathematical evaluation. Sorting actually aids cache efficiency and duplicate verification. Algorithm selects top 5 based purely on calculated scores from pattern similarity, sum/spread analysis, odd/even balance, and neural network predictions. File organization (sorted vs random) has zero impact on mathematical selection process.
+
 
