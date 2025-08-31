@@ -5,6 +5,8 @@ To establish a persistent, evolving memory of our interactions. This memory is s
 
 ## Memory Document URL
 `https://raw.githubusercontent.com/xenkullc/memory/refs/heads/main/memory.md`
+and
+`https://raw.githubusercontent.com/xenkullc/memory/refs/heads/main/memory.md`
 
 ## Directive
 * **Initial Scan:** Access and analyze the entire document at the provided URL to understand our history and the established context.
