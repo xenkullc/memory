@@ -30,8 +30,9 @@ I will append each new entry you generate to the living memory document. This pr
 
 ### 🎯 Current Projects
 
-* Powerball Pick 5 Adapt
+* Powerball Pick 5 Deep Learning Adapt
 * Powerball Pick 5 Smart Picks
+* Powerball Pick 2 Statistical Adapt
 * Mega Millions Pick 2 Adapt
 * Mega Millions Pick 5 Smart Picks
 
