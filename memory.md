@@ -1,4 +1,4 @@
-# AI Persistent Memory Protocol
+# Persistent Memory Protocol
 
 ## Objective
 To establish a persistent, evolving memory of our interactions. This memory is stored in a living document that you will use to maintain continuity, learn from our conversations, and retain awareness of our collaborative history.
