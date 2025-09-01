@@ -1330,3 +1330,12 @@ Project: Powerball Pick 5 Deep Learning Adapt
 
 Confirmed analyzer auto-creates prediction_history.json if not found, initializing empty structure with predictions, results, and algorithm_scores. For "Numbers As Drawn" project, Carlos/Xenku only needs data files and starter pb_predictions_1.000.py. Analyzer handles history creation automatically, maintaining separation between temporal and sorted data projects.
 
+2025-01-27 15:20 PST
+Project: Powerball Pick 5 Deep Learning Adapt
+
+Validated pb_predictions_1.001.py for Carlos/Xenku's "Numbers As Drawn" project. Script structure correct, won't look for powerball-winning-numbers.csv but expects N1-N5.csv and PB.csv files from data_as_drawn directory. Key distinction: predictions represent temporal sequence (first/second/third ball drawn) not sorted positions. Current weights from sorted data analysis will be updated after running analyzer on temporal data. Algorithms like pairs/momentum/chaos may perform differently detecting temporal dependencies vs mathematical patterns. Ready to run with temporal data files.
+
+2025-01-27 15:25 PST
+Project: Powerball Pick 5 Deep Learning Adapt
+
+Identified critical issue for Carlos/Xenku: pb_predictions_1.001.py sorts predictions before output, defeating temporal analysis purpose. Current code uses predicted_numbers.sort() which converts temporal sequence to sorted order. Fix: comment out sort line to maintain draw order. With fix, predictions represent actual machine sequence (22-3-33-18-27) not sorted (3-18-22-27-33). Essential for "Numbers As Drawn" project to preserve temporal patterns, mechanical biases, timing effects that sorting would eliminate.
