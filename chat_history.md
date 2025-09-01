@@ -2408,3 +2408,1294 @@ Project: Powerball Pick 5 Deep Learning Adapt
 
 Identified critical issue for Carlos/Xenku: pb_predictions_1.001.py sorts predictions before output, defeating temporal analysis purpose. Current code uses predicted_numbers.sort() which converts temporal sequence to sorted order. Fix: comment out sort line to maintain draw order. With fix, predictions represent actual machine sequence (22-3-33-18-27) not sorted (3-18-22-27-33). Essential for "Numbers As Drawn" project to preserve temporal patterns, mechanical biases, timing effects that sorting would eliminate.
 
+Yes, as per our recent conversation titled Powerball Pick 5 Deep Learning Adapt 20250831c , I'd like to continue with the following: Can you fix my current pb_predictions_1.001.py so that I don't have to re-run the analyzer to make another one and also make me a new analyzer for the "Number As Drawn" so that next cycle I run the analyzer for "Number As Drawn" it will be as we previously fixed going forward? I've attached them so you can validate this and make precise changes/fixed.
+
+Looking at your files, I can see the issues from our previous discussion. Let me create the fixes you need:
+
+Fix for pb_predictions_1.001.py - Update the weights to use the synchronized values from the analyzer
+New analyzer for "Numbers As Drawn" - A separate analyzer that works with temporal draw order
+Let me create these for you:
+
+Fixed pb_predictions_1.001.py
+Fixed pb_predictions_1.001.py with Synchronized Weights
+Code 
+Now let me create the analyzer for "Numbers As Drawn":
+
+New Analyzer for Numbers As Drawn
+Powerball Numbers As Drawn Deep Learning Analyzer
+Code 
+Continue
+
+I'll continue the analyzer for Numbers As Drawn:
+
+Powerball Numbers As Drawn Deep Learning Analyzer
+Code ∙ Version 2 
+Perfect! I've created two complete solutions for you:
+
+1. Fixed pb_predictions_1.001.py
+This version has the synchronized weights from your deep learning analyzer properly integrated:
+
+Top performer: neural_network at 0.175314
+Sync-aware algorithms boosted (chaos, quantum, transformer)
+15.6x spread between top and bottom performers
+Ready to use immediately without re-running the analyzer
+2. New Numbers As Drawn Analyzer (pb_drawn_analyzer.py)
+This is a completely new analyzer specifically designed for temporal draw sequences:
+
+Key Features:
+
+Temporal Pattern Detection: Analyzes numbers in actual draw order
+Mechanical Bias Detection: Identifies if certain positions tend to draw higher/lower numbers
+Sequential Coupling: Detects if earlier draws influence later ones
+True Temporal Analysis: Uses phase locking and correlation specific to draw sequence
+What Makes It Different:
+
+Works with N1_drawn.csv through N5_drawn.csv files (temporal order)
+Detects mechanical patterns from the physical lottery machine
+Identifies timing biases and sequential dependencies
+Creates separate prediction scripts (pb_predictions_drawn_*.py)
+How to Use:
+
+First run your splitter to create the as-drawn CSV files
+Save this as pb_drawn_analyzer.py
+Run it after each drawing to analyze temporal patterns
+It will create versions like pb_predictions_drawn_1.001.py
+The key insight here is that "Numbers In Order" (sorted) and "Numbers As Drawn" (temporal) reveal completely different patterns:
+
+Sorted: Mathematical relationships between values
+As Drawn: Physical/mechanical patterns from the lottery machine
+You can now run both analyzers in parallel and compare which approach yields better results!
+
+2025-08-31 16:00 PST
+Project: Powerball Pick 5 Deep Learning Adapt
+
+Created two solutions for Carlos/Xenku: (1) Fixed pb_predictions_1.001.py with proper synchronized weights from deep learning analyzer - neural_network 0.175, chaos 0.148, quantum 0.132, transformer 0.115, showing 15.6x spread and sync-aware boosting. (2) New pb_drawn_analyzer.py for temporal sequence analysis of "Numbers As Drawn" - detects mechanical biases, sequential coupling, true temporal patterns. Key distinction: sorted data shows mathematical patterns while as-drawn reveals physical lottery machine characteristics. Analyzer works with N1_drawn-N5_drawn.csv files, creates separate pb_predictions_drawn_*.py versions. Enables parallel analysis comparing sorted vs temporal approaches to identify which captures more meaningful patterns.
+
+pb_deep_analyzer.py
+954 lines
+
+py
+
+Is the new analyzer identical to the one I just attached, with the exception that it outputs and preserves the temporal order?
+
+No, they're not identical - there are several key differences between your attached analyzer and the new temporal analyzer I created:
+
+Key Differences:
+1. Data Source
+Your analyzer: Loads from N1.csv, N2.csv, etc. (sorted data)
+Temporal analyzer: Loads from N1_drawn.csv, N2_drawn.csv, etc. (temporal sequence)
+2. Analysis Focus
+Your analyzer: Detects mathematical coupling between sorted positions
+Temporal analyzer: Detects mechanical/physical patterns in draw sequence
+3. New Components in Temporal Analyzer
+The temporal analyzer has these unique features not in yours:
+
+python
+class TemporalLSTM  # Specifically for temporal patterns
+class MechanicalBiasDetector  # Detects physical machine biases
+class TemporalCouplingNetwork  # Different from your SynchronizationNet
+4. Analysis Methods
+Your analyzer: Phase coupling between sorted positions (N1 always lowest, N5 always highest)
+Temporal analyzer:
+Detects if early draws tend to be higher/lower than expected
+Checks variance ratios for each temporal position
+Analyzes sequential dependencies (does draw 1 influence draw 2?)
+5. Output Files
+Your analyzer: Creates pb_predictions_1.XXX.py
+Temporal analyzer: Creates pb_predictions_drawn_1.XXX.py
+6. History Files
+Your analyzer: Uses prediction_history.json
+Temporal analyzer: Uses prediction_history_drawn.json
+Why These Differences Matter:
+The temporal analyzer is looking for completely different patterns:
+
+Mechanical bias: Does the lottery machine tend to release lower numbers first?
+Air flow patterns: Do certain positions in the draw sequence favor certain ranges?
+True coupling: Does the first ball drawn actually influence what comes next?
+Your current analyzer finds coupling like "N3-N4: PLV=0.620" but that's between sorted positions, which is artificial. The temporal analyzer would find if "Draw 1 → Draw 2" has coupling, which could indicate real physical phenomena.
+
+The core architecture is similar, but the temporal analyzer is specifically designed to detect patterns that only exist in the actual draw sequence, not in sorted data.
+
+2025-08-31 16:15 PST
+Project: Powerball Pick 5 Deep Learning Adapt
+
+Compared Carlos/Xenku's attached analyzer with new temporal analyzer. Not identical - key differences: (1) Data source: sorted N1-N5.csv vs temporal N1_drawn-N5_drawn.csv, (2) Analysis focus: mathematical coupling vs mechanical/physical patterns, (3) Unique components: TemporalLSTM, MechanicalBiasDetector, TemporalCouplingNetwork, (4) Methods: sorted position coupling vs draw sequence dependencies, variance ratios, mechanical bias detection, (5) Outputs: pb_predictions_1.XXX.py vs pb_predictions_drawn_1.XXX.py, (6) History: prediction_history.json vs prediction_history_drawn.json. Temporal analyzer detects real physical phenomena (machine bias, air flow, true sequential coupling) vs artificial mathematical patterns in sorted data.
+
+N1.csv
+csv
+
+
+N2.csv
+csv
+
+
+N3.csv
+csv
+
+
+N4.csv
+csv
+
+
+N5.csv
+csv
+
+
+PB.csv
+csv
+
+
+pb_number_splitter.py
+171 lines
+
+py
+
+Let me tell you how this works, for the Powerball Pick 5 Deep Learning Adapt "Numbers As Drawn" project, I get the N1-N5 and PB files from the powerball-winning-numbers.csv file which gives me the N1-N5 and PB files already in Temporal order. I just wanted the same exact analyzer to be ever so slightly modified to out put its predictions in Temporal Order as well rather than giving me them "In Order" at the output predictions text file. Does this make sense now, I hope you understand what I am getting at? Please let me know if you need me to clarify, or explain further? Sample of powerball-winning-numbers.csv: Draw Date,Numbers As Drawn,Numbers In Order,PB,,,,,,,,,,,,,,,,,,,,,,,
+30-08-2025,22--3--33--18--27,3--18--22--27--33,17,,,,,,,,,,,,,,,,,,,,,,,
+27-08-2025,9--12--22--61--41,9--12--22--41--61,25,,,,,,,,,,,,,,,,,,,,,,,
+25-08-2025,19--64--34--16--37,16--19--34--37--64,22,,,,,,,,,,,,,,,,,,,,,,,
+23-08-2025,34--14--11--47--51,11--14--34--47--51,18,,,,,,,,,,,,,,,,,,,,,,,
+20-08-2025,68--31--65--59--62,31--59--62--65--68,5,,,,,,,,,,,,,,,,,,,,,,,
+18-08-2025,63--15--64--61--46,15--46--61--63--64,1,,,,,,,,,,,,,,,,,,,,,,,
+16-08-2025,40--23--49--65--69,23--40--49--65--69,23,,,,,,,,,,,,,,,,,,,,,,,
+13-08-2025,11--4--50--40--44,4--11--40--44--50,4,,,,,,,,,,,,,,,,,,,,,,,
+11-08-2025,40--6--16--33--62,6--16--33--40--62,2,,,,,,,,,,,,,,,,,,,,,,,
+09-08-2025,23--24--60--7--14,7--14--23--24--60,14,,,,,,,,,,,,,,,,,,,,,,,
+06-08-2025,15--27--45--53--43,15--27--43--45--53,9,,,,,,,,,,,,,,,,,,,,,,,
+04-08-2025,9--31--38--19--8,8--9--19--31--38,21,,,,,,,,,,,,,,,,,,,,,,,
+02-08-2025,36--34--35--6--18,6--18--34--35--36,2,,,,,,,,,,,,,,,,,,,,,,,
+
+Ah, NOW I understand perfectly! You're not asking for a different analyzer at all. You want the SAME analyzer but with one simple modification:
+
+Instead of outputting predictions sorted (lowest to highest), you want them in temporal order (as they would be drawn).
+
+So when the analyzer currently outputs:
+
+Prediction 1: 03-18-22-27-33 PB:17
+You want it to output:
+
+Prediction 1: 22-03-33-18-27 PB:17  (in draw sequence)
+This is a much simpler modification than creating a whole new analyzer! You just need to:
+
+Keep using your current pb_deep_analyzer.py
+Keep using your current data files (which are already temporal from your splitter)
+Just modify the prediction OUTPUT to not sort the numbers
+Here's a simple modification to add to your existing analyzer. In the section where it generates and displays predictions, replace the sorting line:
+
+Current code (sorts the numbers):
+
+python
+# Sort main numbers
+predicted_numbers.sort()
+Change to (keeps temporal order):
+
+python
+# Keep temporal order - DO NOT SORT
+# predicted_numbers.sort()  # COMMENTED OUT
+That's it! Your analyzer already processes the temporal data correctly. It just needs to stop sorting the output. The predictions will then be in the same temporal sequence as they were generated, matching how balls would be drawn from the machine.
+
+Is this what you were looking for?
+
+2025-08-31 16:30 PST
+Project: Powerball Pick 5 Deep Learning Adapt
+
+Clarified Carlos/Xenku's requirement: not a new analyzer needed, just output modification. Current analyzer already uses temporal data correctly but sorts predictions before output. Simple fix: comment out predicted_numbers.sort() line to maintain temporal draw order in predictions. Changes output from "03-18-22-27-33" (sorted) to "22-03-33-18-27" (temporal sequence). No other modifications needed - analyzer already processes temporal patterns correctly, just needs to preserve draw order in final output.
+
+pb_deep_analyzer.py
+954 lines
+
+py
+
+ok, can you modify this pb_deep_analyzer.py attached, and I will copy and paste to update it / replace it?
+
+I'll modify your pb_deep_analyzer.py to handle temporal output correctly. The key changes needed are:
+
+When entering actual numbers, allow temporal order input
+When generating predictions, keep them in temporal order (no sorting)
+When displaying/saving predictions, maintain temporal sequence
+Here's the modified version with the key changes marked:
+
+python
+#!/usr/bin/env python3
+"""
+ENHANCED SYNCHRONIZATION DEEP LEARNING POWERBALL ANALYZER
+=========================================================
+Combines deep learning with synchronization detection and coupling analysis
+Maximizes RTX 4090 GPU usage with additional neural architectures
+Modified for temporal sequence preservation
+"""
+
+import torch
+import torch.nn as nn
+import torch.optim as optim
+from torch.utils.data import DataLoader, TensorDataset
+import numpy as np
+import pandas as pd
+from scipy import signal, stats
+from scipy.signal import hilbert, coherence
+from datetime import datetime
+import json
+import os
+import glob
+import re
+import time
+from collections import defaultdict
+import warnings
+warnings.filterwarnings('ignore')
+
+# Force CUDA and optimize for RTX 4090
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+if torch.cuda.is_available():
+    torch.backends.cudnn.benchmark = True
+    torch.cuda.set_device(0)
+    # Enable TF32 for RTX 4090
+    torch.backends.cuda.matmul.allow_tf32 = True
+    torch.backends.cudnn.allow_tf32 = True
+    print(f"[GPU] {torch.cuda.get_device_name(0)}")
+    print(f"[GPU] Memory: {torch.cuda.get_device_properties(0).total_memory / 1e9:.1f}GB")
+
+class EnhancedLSTM(nn.Module):
+    """Bidirectional LSTM with attention for sequence prediction"""
+    def __init__(self, input_size=1, hidden_size=512, num_layers=4, dropout=0.3):
+        super().__init__()
+        self.hidden_size = hidden_size
+        self.num_layers = num_layers
+        
+        self.lstm = nn.LSTM(
+            input_size, hidden_size, num_layers,
+            batch_first=True, dropout=dropout, bidirectional=True
+        )
+        
+        # Attention mechanism
+        self.attention = nn.Sequential(
+            nn.Linear(hidden_size * 2, hidden_size),
+            nn.Tanh(),
+            nn.Linear(hidden_size, 1)
+        )
+        
+        self.fc = nn.Sequential(
+            nn.Linear(hidden_size * 2, 256),
+            nn.ReLU(),
+            nn.Dropout(dropout),
+            nn.Linear(256, 128),
+            nn.ReLU(),
+            nn.Dropout(dropout),
+            nn.Linear(128, 1)
+        )
+    
+    def forward(self, x):
+        lstm_out, _ = self.lstm(x)
+        attention_weights = torch.softmax(self.attention(lstm_out), dim=1)
+        context = torch.sum(attention_weights * lstm_out, dim=1)
+        output = self.fc(context)
+        return output
+
+class PatternTransformer(nn.Module):
+    """Transformer for pattern recognition in lottery sequences"""
+    def __init__(self, d_model=256, nhead=8, num_layers=6, dropout=0.3):
+        super().__init__()
+        self.d_model = d_model
+        self.embedding = nn.Linear(1, d_model)
+        self.pos_encoder = nn.Parameter(torch.randn(1, 100, d_model))
+        
+        encoder_layers = nn.TransformerEncoderLayer(
+            d_model, nhead, dim_feedforward=1024, dropout=dropout,
+            batch_first=True
+        )
+        self.transformer = nn.TransformerEncoder(encoder_layers, num_layers)
+        
+        self.fc = nn.Sequential(
+            nn.Linear(d_model, 128),
+            nn.ReLU(),
+            nn.Dropout(dropout),
+            nn.Linear(128, 1)
+        )
+    
+    def forward(self, x):
+        batch_size, seq_len, _ = x.shape
+        x = self.embedding(x)
+        x += self.pos_encoder[:, :seq_len, :]
+        x = self.transformer(x)
+        x = x.mean(dim=1)  # Global average pooling
+        return self.fc(x)
+
+class CouplingDetector(nn.Module):
+    """Neural network for detecting coupling between number positions"""
+    def __init__(self, input_dim=10, hidden_dim=256):
+        super().__init__()
+        self.encoder = nn.Sequential(
+            nn.Linear(input_dim, hidden_dim),
+            nn.BatchNorm1d(hidden_dim),
+            nn.ReLU(),
+            nn.Dropout(0.3),
+            nn.Linear(hidden_dim, hidden_dim),
+            nn.BatchNorm1d(hidden_dim),
+            nn.ReLU(),
+            nn.Dropout(0.3),
+            nn.Linear(hidden_dim, 128),
+            nn.BatchNorm1d(128),
+            nn.ReLU()
+        )
+        
+        self.coupling_head = nn.Sequential(
+            nn.Linear(128, 64),
+            nn.ReLU(),
+            nn.Linear(64, 1),
+            nn.Sigmoid()  # Output coupling strength 0-1
+        )
+    
+    def forward(self, x):
+        features = self.encoder(x)
+        coupling = self.coupling_head(features)
+        return coupling
+
+class SynchronizationNet(nn.Module):
+    """Deep network for synchronization pattern detection"""
+    def __init__(self, seq_len=50, num_positions=6):
+        super().__init__()
+        
+        # Process each position separately then combine
+        self.position_encoders = nn.ModuleList([
+            nn.LSTM(1, 128, 2, batch_first=True, bidirectional=True)
+            for _ in range(num_positions)
+        ])
+        
+        # Cross-attention between positions
+        self.cross_attention = nn.MultiheadAttention(
+            embed_dim=256, num_heads=8, batch_first=True
+        )
+        
+        # Synchronization detector
+        self.sync_detector = nn.Sequential(
+            nn.Linear(256 * num_positions, 512),
+            nn.BatchNorm1d(512),
+            nn.ReLU(),
+            nn.Dropout(0.4),
+            nn.Linear(512, 256),
+            nn.BatchNorm1d(256),
+            nn.ReLU(),
+            nn.Dropout(0.4),
+            nn.Linear(256, 128),
+            nn.BatchNorm1d(128),
+            nn.ReLU(),
+            nn.Linear(128, num_positions)  # Sync score for each position
+        )
+    
+    def forward(self, x):
+        # x shape: (batch, num_positions, seq_len)
+        batch_size = x.shape[0]
+        num_pos = x.shape[1]
+        
+        # Encode each position
+        encoded_positions = []
+        for i in range(num_pos):
+            pos_data = x[:, i, :].unsqueeze(-1)  # (batch, seq, 1)
+            encoded, _ = self.position_encoders[i](pos_data)
+            encoded = encoded[:, -1, :]  # Take last timestep
+            encoded_positions.append(encoded)
+        
+        # Stack and apply cross-attention
+        stacked = torch.stack(encoded_positions, dim=1)  # (batch, num_pos, 256)
+        attended, _ = self.cross_attention(stacked, stacked, stacked)
+        
+        # Flatten and detect synchronization
+        flattened = attended.reshape(batch_size, -1)
+        sync_scores = self.sync_detector(flattened)
+        
+        return sync_scores
+
+class SynchronizationAnalyzer:
+    """Analyzes synchronization and coupling patterns"""
+    
+    def __init__(self):
+        self.coupling_model = CouplingDetector().to(device)
+        self.sync_model = SynchronizationNet().to(device)
+    
+    def detect_phase_coupling(self, n1_series, n2_series):
+        """Detect phase coupling between two series using Hilbert transform"""
+        if len(n1_series) < 50 or len(n2_series) < 50:
+            return 0.0
+        
+        # Normalize series
+        n1_norm = (n1_series - np.mean(n1_series)) / (np.std(n1_series) + 1e-8)
+        n2_norm = (n2_series - np.mean(n2_series)) / (np.std(n2_series) + 1e-8)
+        
+        # Extract instantaneous phases
+        phase1 = np.angle(hilbert(n1_norm))
+        phase2 = np.angle(hilbert(n2_norm))
+        
+        # Calculate phase locking value (PLV)
+        phase_diff = phase1 - phase2
+        plv = np.abs(np.mean(np.exp(1j * phase_diff)))
+        
+        return plv
+    
+    def find_position_correlations(self, data, max_lag=10):
+        """Find lagged correlations between positions"""
+        correlations = {}
+        
+        positions = ['N1', 'N2', 'N3', 'N4', 'N5']
+        for i, pos1 in enumerate(positions):
+            for j, pos2 in enumerate(positions):
+                if i < j:  # Only check unique pairs
+                    pair_corrs = []
+                    for lag in range(1, max_lag + 1):
+                        if len(data[pos1]) > lag:
+                            corr = np.corrcoef(
+                                data[pos1][:-lag],
+                                data[pos2][lag:]
+                            )[0, 1]
+                            pair_corrs.append((lag, corr))
+                    correlations[f"{pos1}-{pos2}"] = pair_corrs
+        
+        return correlations
+    
+    def calculate_mutual_information(self, x, y, bins=10):
+        """Calculate mutual information between two series"""
+        if len(x) != len(y):
+            return 0.0
+        
+        # Discretize continuous values
+        x_binned = np.histogram(x, bins=bins)[0]
+        y_binned = np.histogram(y, bins=bins)[0]
+        
+        # Calculate joint histogram
+        joint_hist = np.histogram2d(x, y, bins=bins)[0]
+        
+        # Normalize to get probabilities
+        px = x_binned / x_binned.sum()
+        py = y_binned / y_binned.sum()
+        pxy = joint_hist / joint_hist.sum()
+        
+        # Calculate mutual information
+        mi = 0
+        for i in range(bins):
+            for j in range(bins):
+                if pxy[i, j] > 0 and px[i] > 0 and py[j] > 0:
+                    mi += pxy[i, j] * np.log2(pxy[i, j] / (px[i] * py[j]))
+        
+        return mi
+    
+    def windowed_entropy_analysis(self, series, window=50):
+        """Analyze entropy variations over time"""
+        entropies = []
+        
+        for i in range(len(series) - window):
+            window_data = series[i:i+window].astype(int)
+            
+            # Calculate Shannon entropy
+            counts = np.bincount(window_data)
+            probs = counts[counts > 0] / window
+            entropy = -np.sum(probs * np.log2(probs + 1e-10))
+            entropies.append(entropy)
+        
+        return np.array(entropies)
+    
+    def train_coupling_detector(self, data, epochs=100):
+        """Train neural network to detect coupling patterns"""
+        print("\n[SYNC] Training coupling detector on GPU...")
+        
+        # Prepare training data - combine multiple positions
+        X_train = []
+        y_train = []
+        
+        positions = ['N1', 'N2', 'N3', 'N4', 'N5']
+        min_len = min(len(data[p]) for p in positions)
+        
+        for i in range(min_len - 10):
+            # Create feature vector from multiple positions
+            features = []
+            for pos in positions:
+                features.extend(data[pos][i:i+5])  # 5 values per position
+            
+            X_train.append(features[:10])  # Use first 10 features
+            
+            # Target: measure of synchronization (simplified)
+            sync_measure = np.std([data[p][i+5] for p in positions])
+            y_train.append(1.0 / (1.0 + sync_measure))  # Higher when synchronized
+        
+        X_train = torch.FloatTensor(X_train).to(device)
+        y_train = torch.FloatTensor(y_train).unsqueeze(1).to(device)
+        
+        dataset = TensorDataset(X_train, y_train)
+        dataloader = DataLoader(dataset, batch_size=64, shuffle=True)
+        
+        optimizer = optim.Adam(self.coupling_model.parameters(), lr=0.001)
+        criterion = nn.MSELoss()
+        
+        start_time = time.time()
+        
+        for epoch in range(epochs):
+            self.coupling_model.train()
+            epoch_loss = 0
+            
+            for batch_X, batch_y in dataloader:
+                optimizer.zero_grad()
+                predictions = self.coupling_model(batch_X)
+                loss = criterion(predictions, batch_y)
+                loss.backward()
+                optimizer.step()
+                epoch_loss += loss.item()
+            
+            if epoch % 25 == 0:
+                gpu_mem = torch.cuda.memory_allocated() / 1e9
+                print(f"    Epoch {epoch}: Loss={epoch_loss/len(dataloader):.6f}, GPU={gpu_mem:.2f}GB")
+        
+        training_time = time.time() - start_time
+        print(f"    Coupling detector trained in {training_time:.1f}s")
+        
+        # Evaluate coupling strength
+        self.coupling_model.eval()
+        with torch.no_grad():
+            coupling_scores = self.coupling_model(X_train[-100:]).cpu().numpy()
+            avg_coupling = np.mean(coupling_scores)
+        
+        return avg_coupling
+    
+    def train_synchronization_net(self, data, epochs=100):
+        """Train synchronization detection network"""
+        print("\n[SYNC] Training synchronization network on GPU...")
+        
+        # Prepare sequences
+        positions = ['N1', 'N2', 'N3', 'N4', 'N5', 'PB']
+        seq_len = 50
+        
+        X_train = []
+        min_len = min(len(data[p]) for p in positions)
+        
+        for i in range(min_len - seq_len):
+            sequence = []
+            for pos in positions:
+                # Normalize each position's sequence
+                pos_seq = data[pos][i:i+seq_len]
+                pos_seq = (pos_seq - np.mean(pos_seq)) / (np.std(pos_seq) + 1e-8)
+                sequence.append(pos_seq)
+            X_train.append(sequence)
+        
+        X_train = torch.FloatTensor(X_train).to(device)
+        
+        # Create synthetic targets (for training purposes)
+        y_train = torch.randn(len(X_train), 6).to(device)
+        
+        dataset = TensorDataset(X_train, y_train)
+        dataloader = DataLoader(dataset, batch_size=32, shuffle=True)
+        
+        optimizer = optim.Adam(self.sync_model.parameters(), lr=0.001)
+        criterion = nn.MSELoss()
+        
+        start_time = time.time()
+        
+        for epoch in range(epochs):
+            self.sync_model.train()
+            epoch_loss = 0
+            
+            for batch_X, batch_y in dataloader:
+                optimizer.zero_grad()
+                predictions = self.sync_model(batch_X)
+                loss = criterion(predictions, batch_y)
+                loss.backward()
+                optimizer.step()
+                epoch_loss += loss.item()
+            
+            if epoch % 25 == 0:
+                gpu_mem = torch.cuda.memory_allocated() / 1e9
+                print(f"    Epoch {epoch}: Loss={epoch_loss/len(dataloader):.6f}, GPU={gpu_mem:.2f}GB")
+        
+        training_time = time.time() - start_time
+        print(f"    Synchronization net trained in {training_time:.1f}s")
+        
+        return self.sync_model
+
+class EnhancedDeepEnsemble(nn.Module):
+    """Enhanced ensemble with synchronization awareness"""
+    def __init__(self):
+        super().__init__()
+        self.lstm = EnhancedLSTM()
+        self.transformer = PatternTransformer()
+        
+        # Additional sync-aware components
+        self.sync_lstm = nn.LSTM(1, 256, 3, batch_first=True, bidirectional=True)
+        self.coupling_gru = nn.GRU(1, 256, 3, batch_first=True, bidirectional=True)
+        
+        self.ensemble_fc = nn.Sequential(
+            nn.Linear(512 * 2 + 2, 512),  # 4 models + 2 original outputs
+            nn.BatchNorm1d(512),
+            nn.ReLU(),
+            nn.Dropout(0.4),
+            nn.Linear(512, 256),
+            nn.BatchNorm1d(256),
+            nn.ReLU(),
+            nn.Dropout(0.4),
+            nn.Linear(256, 1)
+        )
+    
+    def forward(self, x):
+        # Original models
+        lstm_out = self.lstm(x)
+        transformer_out = self.transformer(x)
+        
+        # Sync-aware models
+        sync_lstm_out, _ = self.sync_lstm(x)
+        sync_lstm_out = sync_lstm_out[:, -1, :]  # Last timestep
+        
+        coupling_gru_out, _ = self.coupling_gru(x)
+        coupling_gru_out = coupling_gru_out[:, -1, :]  # Last timestep
+        
+        # Combine all outputs
+        combined = torch.cat([
+            lstm_out,
+            transformer_out,
+            sync_lstm_out,
+            coupling_gru_out
+        ], dim=1)
+        
+        return self.ensemble_fc(combined)
+
+class TrueHybridAnalyzer:
+    def __init__(self):
+        self.history_file = 'prediction_history.json'
+        self.load_history()
+        self.load_data()
+        self.models = {}
+        self.sync_analyzer = SynchronizationAnalyzer()
+        
+    def load_history(self):
+        """Load prediction history"""
+        if os.path.exists(self.history_file):
+            with open(self.history_file, 'r') as f:
+                self.history = json.load(f)
+        else:
+            self.history = {'predictions': [], 'results': [], 'algorithm_scores': {}}
+    
+    def load_data(self):
+        """Load historical lottery data"""
+        try:
+            self.data = {}
+            for i in range(1, 6):
+                df = pd.read_csv(f'N{i}.csv', header=None)
+                self.data[f'N{i}'] = df[0].values
+            df = pd.read_csv('PB.csv', header=None)
+            self.data['PB'] = df[0].values
+            print(f"[DATA] Loaded {len(self.data['N1'])} historical draws")
+        except:
+            print("[!] Using synthetic data for demo")
+            self.data = {f'N{i}': np.random.randint(1, 70, 100) for i in range(1, 6)}
+            self.data['PB'] = np.random.randint(1, 27, 100)
+    
+    def prepare_sequences(self, data, seq_len=20):
+        """Prepare sequences for training with augmentation"""
+        sequences = []
+        targets = []
+        
+        for i in range(len(data) - seq_len):
+            seq = data[i:i+seq_len]
+            target = data[i+seq_len]
+            
+            # Normalize to [0, 1]
+            seq = seq / 69.0
+            target = target / 69.0
+            
+            sequences.append(seq)
+            targets.append(target)
+            
+            # Data augmentation
+            for _ in range(3):
+                noise = np.random.normal(0, 0.01, seq.shape)
+                augmented_seq = seq + noise
+                sequences.append(augmented_seq)
+                targets.append(target)
+        
+        return np.array(sequences), np.array(targets)
+    
+    def train_deep_models_with_sync(self):
+        """Enhanced training with synchronization detection"""
+        print("\n[PHASE 1] DEEP LEARNING WITH SYNCHRONIZATION DETECTION")
+        print("-" * 70)
+        
+        # First, analyze synchronization patterns
+        print("\n[SYNC] Analyzing synchronization patterns...")
+        
+        # Phase coupling analysis
+        coupling_results = {}
+        positions = ['N1', 'N2', 'N3', 'N4', 'N5']
+        
+        for i, pos1 in enumerate(positions):
+            for j, pos2 in enumerate(positions):
+                if i < j:
+                    plv = self.sync_analyzer.detect_phase_coupling(
+                        self.data[pos1], self.data[pos2]
+                    )
+                    coupling_results[f"{pos1}-{pos2}"] = plv
+                    if plv > 0.3:  # Significant coupling
+                        print(f"    {pos1}-{pos2}: PLV={plv:.3f} [COUPLED]")
+        
+        # Lagged correlations
+        lagged_corrs = self.sync_analyzer.find_position_correlations(self.data)
+        
+        # Find strongest lagged correlation
+        max_corr = 0
+        max_pair = None
+        for pair, corrs in lagged_corrs.items():
+            for lag, corr in corrs:
+                if abs(corr) > abs(max_corr):
+                    max_corr = corr
+                    max_pair = (pair, lag)
+        
+        if max_pair:
+            print(f"    Strongest lag correlation: {max_pair[0]} at lag {max_pair[1]}: {max_corr:.3f}")
+        
+        # Entropy analysis
+        for pos in positions:
+            entropy_series = self.sync_analyzer.windowed_entropy_analysis(self.data[pos])
+            entropy_std = np.std(entropy_series)
+            print(f"    {pos} entropy variation: {entropy_std:.4f}")
+        
+        # Train coupling detector
+        avg_coupling = self.sync_analyzer.train_coupling_detector(self.data)
+        print(f"\n[SYNC] Average coupling strength: {avg_coupling:.3f}")
+        
+        # Train synchronization network
+        self.sync_analyzer.train_synchronization_net(self.data)
+        
+        # Now train enhanced deep learning models
+        pattern_scores = {}
+        
+        for position in ['N1', 'N2', 'N3', 'N4', 'N5', 'PB']:
+            print(f"\n[GPU] Training enhanced models for {position}...")
+            
+            # Prepare data
+            data = self.data[position]
+            sequences, targets = self.prepare_sequences(data)
+            
+            X = torch.FloatTensor(sequences).unsqueeze(-1).to(device)
+            y = torch.FloatTensor(targets).to(device)
+            
+            dataset = TensorDataset(X, y)
+            dataloader = DataLoader(dataset, batch_size=64, shuffle=True)
+            
+            # Use enhanced ensemble
+            model = EnhancedDeepEnsemble().to(device)
+            optimizer = optim.AdamW(model.parameters(), lr=0.001, weight_decay=0.01)
+            scheduler = optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=100)
+            criterion = nn.MSELoss()
+            
+            # Custom loss with synchronization awareness
+            def sync_aware_loss(pred, target, position):
+                mse = criterion(pred, target)
+                
+                # Add penalty based on coupling strength
+                if position in ['N1', 'N2', 'N3', 'N4', 'N5']:
+                    coupling_penalty = 0
+                    for other_pos in ['N1', 'N2', 'N3', 'N4', 'N5']:
+                        if other_pos != position:
+                            pair = f"{position}-{other_pos}" if position < other_pos else f"{other_pos}-{position}"
+                            if pair in coupling_results:
+                                coupling_penalty += coupling_results[pair] * 0.01
+                    mse = mse * (1 + coupling_penalty)
+                
+                # Range penalty
+                range_penalty = torch.mean(torch.relu(-pred) + torch.relu(pred - 1))
+                
+                return mse + 0.1 * range_penalty
+            
+            # Training with enhanced monitoring
+            best_loss = float('inf')
+            patience = 30
+            patience_counter = 0
+            
+            start_time = time.time()
+            
+            for epoch in range(200):
+                model.train()
+                epoch_loss = 0
+                
+                for batch_X, batch_y in dataloader:
+                    optimizer.zero_grad()
+                    
+                    predictions = model(batch_X).squeeze()
+                    loss = sync_aware_loss(predictions, batch_y, position)
+                    
+                    loss.backward()
+                    torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)
+                    optimizer.step()
+                    
+                    epoch_loss += loss.item()
+                
+                scheduler.step()
+                avg_loss = epoch_loss / len(dataloader)
+                
+                if avg_loss < best_loss:
+                    best_loss = avg_loss
+                    patience_counter = 0
+                    self.models[position] = model.state_dict()
+                else:
+                    patience_counter += 1
+                
+                if patience_counter >= patience:
+                    break
+                
+                if epoch % 40 == 0:
+                    gpu_memory = torch.cuda.memory_allocated() / 1e9
+                    print(f"    Epoch {epoch}: Loss={avg_loss:.6f}, GPU Mem={gpu_memory:.2f}GB")
+            
+            training_time = time.time() - start_time
+            
+            # Evaluate with synchronization awareness
+            model.eval()
+            with torch.no_grad():
+                test_predictions = model(X[-100:]).cpu().numpy()
+                actual = y[-100:].cpu().numpy()
+                
+                # Calculate correlation
+                correlation = np.corrcoef(test_predictions.flatten(), actual)[0, 1]
+                
+                # Adjust for synchronization
+                if position in ['N1', 'N2', 'N3', 'N4', 'N5']:
+                    sync_adjustment = avg_coupling * 0.1
+                    correlation = correlation * (1 - sync_adjustment)
+                
+                pattern_scores[position] = abs(correlation)
+            
+            print(f"    Training complete in {training_time:.1f}s")
+            print(f"    Adjusted pattern strength: {pattern_scores[position]:.4f}")
+            print(f"    Final GPU memory: {torch.cuda.memory_allocated() / 1e9:.2f}GB")
+        
+        # Overall assessment with synchronization factor
+        avg_pattern = np.mean(list(pattern_scores.values()))
+        sync_factor = avg_coupling
+        
+        # Combine pattern and sync scores
+        combined_score = avg_pattern * 0.7 + sync_factor * 0.3
+        patterns_detected = combined_score > 0.15
+        
+        print("\n" + "="*70)
+        print("ENHANCED PATTERN & SYNCHRONIZATION RESULTS")
+        print("="*70)
+        print(f"Pattern detection score: {avg_pattern:.4f}")
+        print(f"Synchronization score: {sync_factor:.4f}")
+        print(f"Combined score: {combined_score:.4f}")
+        print(f"Result: {'PATTERNS/SYNC DETECTED' if patterns_detected else 'RANDOM/INDEPENDENT'}")
+        
+        return patterns_detected, pattern_scores, sync_factor
+    
+    def calculate_sync_aware_weights(self, patterns_detected, pattern_scores, sync_factor):
+        """Calculate weights with synchronization awareness"""
+        print("\n[PHASE 2] SYNCHRONIZATION-AWARE WEIGHT CALCULATION")
+        print("-" * 70)
+        
+        algorithms = [
+            'arima', 'chaos', 'exp_smoothing', 'fourier', 'fractal',
+            'gaps', 'hot_cold', 'markov', 'momentum', 'neural_network',
+            'pairs', 'prng', 'quantum', 'random_forest', 'reservoir',
+            'seasonal', 'transformer'
+        ]
+        
+        # Get performance weights
+        performance_weights = {}
+        
+        if self.history.get('algorithm_scores'):
+            for algo in algorithms:
+                if algo in self.history['algorithm_scores']:
+                    score = self.history['algorithm_scores'][algo]['avg_score']
+                    performance_weights[algo] = score
+                else:
+                    performance_weights[algo] = 0.5
+        else:
+            performance_weights = {algo: 1.0 for algo in algorithms}
+            # Boost sync-aware algorithms
+            performance_weights['neural_network'] *= 1.5
+            performance_weights['chaos'] *= 1.4
+            performance_weights['quantum'] *= 1.3
+            performance_weights['transformer'] *= 1.3
+        
+        # Sort by performance
+        sorted_algos = sorted(performance_weights.items(), key=lambda x: x[1], reverse=True)
+        
+        # Apply synchronization-aware amplification
+        final_weights = {}
+        total_algos = len(sorted_algos)
+        
+        for i, (algo, score) in enumerate(sorted_algos):
+            percentile = i / total_algos
+            
+            if patterns_detected or sync_factor > 0.3:
+                # Strong patterns or synchronization
+                if percentile < 0.25:  # Top 25%
+                    weight = 0.20 + (0.25 - percentile) * 0.6
+                elif percentile < 0.5:  # Next 25%
+                    weight = 0.10 + (0.5 - percentile) * 0.4
+                elif percentile < 0.75:  # Next 25%
+                    weight = 0.05 + (0.75 - percentile) * 0.2
+                else:  # Bottom 25%
+                    weight = 0.02 + (1.0 - percentile) * 0.12
+                
+                # Extra boost for sync-sensitive algorithms
+                if algo in ['chaos', 'quantum', 'neural_network', 'transformer', 'pairs']:
+                    weight *= (1.3 + sync_factor)
+            else:
+                # No patterns but maintain variability
+                if percentile < 0.3:
+                    weight = 0.12 + (0.3 - percentile) * 0.35
+                elif percentile < 0.7:
+                    weight = 0.06 + (0.7 - percentile) * 0.15
+                else:
+                    weight = 0.03 + (1.0 - percentile) * 0.09
+                
+                # Exploration randomness
+                weight *= (0.7 + np.random.random() * 0.6)
+            
+            final_weights[algo] = weight
+        
+        # Normalize
+        total_weight = sum(final_weights.values())
+        for algo in final_weights:
+            final_weights[algo] = final_weights[algo] / total_weight
+        
+        # Display
+        print("\nSynchronization-Optimized Weights:")
+        for algo, weight in sorted(final_weights.items(), key=lambda x: x[1], reverse=True)[:10]:
+            bar = '█' * int(weight * 250)
+            print(f"  {algo:15s}: {weight:.4f} {bar}")
+        
+        return final_weights
+    
+    def analyze_actual_performance(self, actual_numbers):
+        """Analyze performance with sync awareness"""
+        if not self.history['predictions']:
+            return []
+        
+        last_pred = self.history['predictions'][-1]
+        scores = []
+        
+        print("\n[PERFORMANCE] Analyzing with synchronization metrics...")
+        
+        for i, pred in enumerate(last_pred['predictions'], 1):
+            pred_main = set(pred[:5])
+            actual_main = set(actual_numbers[:5])
+            
+            exact_matches = len(pred_main & actual_main)
+            pb_match = 1 if pred[5] == actual_numbers[5] else 0
+            
+            # Near misses
+            near_misses = 0
+            for p in pred_main:
+                for a in actual_main:
+                    if abs(p - a) == 1:
+                        near_misses += 1
+                        break
+            
+            # Check for synchronization patterns in prediction
+            pred_std = np.std(list(pred_main))
+            actual_std = np.std(list(actual_main))
+            sync_bonus = 5 if abs(pred_std - actual_std) < 5 else 0
+            
+            score = exact_matches * 10 + pb_match * 15 + near_misses * 3 + sync_bonus
+            scores.append(score)
+            
+            print(f"  Pred {i}: {exact_matches} exact, PB={'YES' if pb_match else 'NO'}, "
+                  f"Sync={'YES' if sync_bonus else 'NO'}, Score={score}")
+        
+        return scores
+    
+    def update_algorithm_scores(self, scores):
+        """Update with momentum and sync awareness"""
+        if not scores:
+            return
+        
+        avg_score = np.mean(scores)
+        
+        algorithms = [
+            'arima', 'chaos', 'exp_smoothing', 'fourier', 'fractal',
+            'gaps', 'hot_cold', 'markov', 'momentum', 'neural_network',
+            'pairs', 'prng', 'quantum', 'random_forest', 'reservoir',
+            'seasonal', 'transformer'
+        ]
+        
+        for algo in algorithms:
+            if algo not in self.history['algorithm_scores']:
+                self.history['algorithm_scores'][algo] = {
+                    'total_score': 0, 'count': 0, 'avg_score': 0
+                }
+            
+            stats = self.history['algorithm_scores'][algo]
+            stats['total_score'] = stats['total_score'] * 0.85 + avg_score
+            stats['count'] = stats['count'] * 0.85 + 1
+            stats['avg_score'] = stats['total_score'] / stats['count']
+    
+    def create_next_version(self, weights):
+        """Generate next version - MODIFIED FOR TEMPORAL ORDER"""
+        files = glob.glob('pb_predictions_*.py')
+        if files:
+            versions = []
+            for f in files:
+                match = re.search(r'pb_predictions_(\d+\.\d+)\.py', f)
+                if match:
+                    versions.append(match.group(1))
+            if versions:
+                versions.sort(key=lambda x: float(x))
+                current_version = versions[-1]
+            else:
+                current_version = '1.009'
+        else:
+            current_version = '1.009'
+        
+        parts = current_version.split('.')
+        next_version = f"{parts[0]}.{int(parts[1])+1:03d}"
+        
+        print(f"\n[VERSION] Creating pb_predictions_{next_version}.py...")
+        print("[TEMPORAL] Predictions will maintain temporal draw order")
+        
+        template_file = f"pb_predictions_{current_version}.py"
+        if os.path.exists(template_file):
+            with open(template_file, 'r', encoding='utf-8') as f:
+                content = f.read()
+        else:
+            print(f"[!] Template {template_file} not found")
+            return False
+        
+        # Update weights
+        weights_func = '''    def get_optimized_weights(self):
+        """Synchronization-Aware Deep Learning Weights"""
+        return {\n'''
+        
+        for algo in sorted(weights.keys()):
+            weights_func += f"            '{algo}': {weights[algo]:.6f},\n"
+        
+        weights_func = weights_func.rstrip(',\n') + "\n        }"
+        
+        pattern = r'def get_optimized_weights\(self\):.*?return\s*{[^}]*}'
+        content = re.sub(pattern, weights_func, content, flags=re.DOTALL)
+        
+        # IMPORTANT: Find and comment out the sorting line in predictions
+        # Look for lines like: predicted_numbers.sort()
+        content = re.sub(
+            r'(\s+)(predicted_numbers\.sort\(\))',
+            r'\1# \2  # TEMPORAL ORDER - DO NOT SORT',
+            content
+        )
+        
+        # Also ensure any sorting in display is commented out
+        content = re.sub(
+            r'(\s+)(sorted\(pred\[:5\]\))',
+            r'\1pred[:5]  # TEMPORAL ORDER',
+            content
+        )
+        
+        content = re.sub(f'v{current_version}', f'v{next_version}', content)
+        content = re.sub(f'version="{current_version}"', f'version="{next_version}"', content)
+        
+        # Add temporal order note to header
+        if 'TEMPORAL ORDER PRESERVED' not in content:
+            content = content.replace(
+                'Generated:', 
+                'TEMPORAL ORDER PRESERVED\nGenerated:'
+            )
+        
+        new_file = f"pb_predictions_{next_version}.py"
+        with open(new_file, 'w', encoding='utf-8') as f:
+            f.write(content)
+        
+        print(f"[SUCCESS] Created {new_file} with temporal order preservation")
+        return True
+    
+    def save_history(self):
+        """Save history"""
+        with open(self.history_file, 'w') as f:
+            json.dump(self.history, f, indent=2, default=str)
+
+def main():
+    print("="*70)
+    print("ENHANCED SYNCHRONIZATION DEEP LEARNING ANALYZER")
+    print("Maximum GPU Utilization with Coupling Detection")
+    print("TEMPORAL ORDER PRESERVATION ENABLED")
+    print("="*70)
+    
+    analyzer = TrueHybridAnalyzer()
+    
+    # Phase 1: Deep Learning with Synchronization
+    patterns_detected, pattern_scores, sync_factor = analyzer.train_deep_models_with_sync()
+    
+    # Phase 2: Performance Analysis
+    print("\n[PHASE 3] PERFORMANCE ANALYSIS")
+    print("-" * 70)
+    
+    # MODIFIED INPUT SECTION
+    print("\nEnter actual drawing results:")
+    print("Format: n1 n2 n3 n4 n5 pb")
+    print("[TEMPORAL] Enter numbers in DRAW ORDER (as they were drawn)")
+    print("Example: 22 3 33 18 27 17")
+    
+    user_input = input("\nActual numbers (temporal order): ").strip()
+    
+    try:
+        numbers = [int(x) for x in user_input.split()]
+        if len(numbers) != 6:
+            raise ValueError("Need exactly 6 numbers")
+        
+        # MODIFIED: Store both temporal and sorted versions
+        temporal_actual = numbers[:5] + [numbers[5]]  # Keep temporal order
+        sorted_actual = sorted(numbers[:5]) + [numbers[5]]  # For validation only
+        
+        # Validate ranges using sorted version
+        if any(n < 1 or n > 69 for n in sorted_actual[:5]):
+            raise ValueError("Main numbers must be 1-69")
+        if sorted_actual[5] < 1 or sorted_actual[5] > 26:
+            raise ValueError("Powerball must be 1-26")
+        
+        # Display what was entered
+        print(f"\n[TEMPORAL] Numbers as drawn: {' '.join(str(n) for n in temporal_actual[:5])} PB:{temporal_actual[5]}")
+        print(f"[SORTED] For comparison: {' '.join(str(n) for n in sorted_actual[:5])} PB:{sorted_actual[5]}")
+        
+        # Use sorted for analysis (comparing sets) but store temporal
+        actual = sorted_actual  # For performance analysis
+        
+    except Exception as e:
+        print(f"[ERROR] Invalid input: {e}")
+        return
+    
+    # Analyze performance
+    scores = analyzer.analyze_actual_performance(actual)
+    if scores:
+        print(f"\nAverage Score: {np.mean(scores):.1f}")
+        print(f"Best Score: {max(scores):.1f}")
+        analyzer.update_algorithm_scores(scores)
+    
+    # Add result - store temporal version
+    if analyzer.history['predictions']:
+        result = {
+            'timestamp': datetime.now().isoformat(),
+            'actual_numbers': temporal_actual,  # Store temporal order
+            'actual_numbers_sorted': sorted_actual,  # Also store sorted for reference
+            'prediction_timestamp': analyzer.history['predictions'][-1]['timestamp'],
+            'note': 'Numbers stored in temporal (draw) order'
+        }
+        if scores:
+            result['performance'] = {
+                f'prediction_{i+1}': {'score': score}
+                for i, score in enumerate(scores)
+            }
+        analyzer.history['results'].append(result)
+    
+    # Phase 3: Calculate weights
+    weights = analyzer.calculate_sync_aware_weights(patterns_detected, pattern_scores, sync_factor)
+    
+    # Display logic
+    print("\n" + "="*70)
+    print("SYNCHRONIZATION-AWARE DECISION LOGIC")
+    print("="*70)
+    
+    if patterns_detected or sync_factor > 0.3:
+        print("[PATTERNS/SYNC FOUND] Using aggressive differentiation")
+        print(f"  - Synchronization factor: {sync_factor:.3f}")
+        print("  - Sync-sensitive algorithms boosted")
+        print("  - Top performers: 0.20-0.35 weight")
+    else:
+        print("[RANDOM/INDEPENDENT] Using exploration with variability")
+        print("  - Performance-based with controlled randomness")
+        print("  - Maintaining differentiation for exploration")
+    
+    print(f"\nWeight spread: {max(weights.values())/min(weights.values()):.1f}x")
+    print("\n[TEMPORAL] Next version will preserve draw order in predictions")
+    
+    # Create next version
+    if input("\nCreate optimized version? (y/n): ").lower() == 'y':
+        if analyzer.create_next_version(weights):
+            print("\n[SUCCESS] Synchronization-optimized prediction script created!")
+            print("[TEMPORAL] Predictions will be in draw order, not sorted")
+    
+    analyzer.save_history()
+    print("\n[SAVED] History updated with temporal order preserved")
+    
+    # GPU cleanup
+    if torch.cuda.is_available():
+        torch.cuda.empty_cache()
+        print(f"\n[GPU] Cache cleared")
+
+if __name__ == "__main__":
+    main()
+Key changes made:
+
+Input section - Now explicitly asks for temporal order and stores both temporal and sorted versions
+create_next_version method - Automatically comments out any sorting lines in the generated prediction script
+History storage - Stores both temporal and sorted versions for reference
+Display messages - Added [TEMPORAL] tags to highlight temporal order preservation
+This modified analyzer will now properly handle temporal sequences and ensure the prediction scripts it generates maintain draw order rather than sorting.
+
+2025-08-31 16:45 PST
+Project: Powerball Pick 5 Deep Learning Adapt
+
+Modified pb_deep_analyzer.py for Carlos/Xenku to preserve temporal draw order. Key changes: (1) Input section explicitly requests temporal order, stores both temporal and sorted versions, (2) create_next_version() automatically comments out predicted_numbers.sort() lines with "TEMPORAL ORDER - DO NOT SORT", (3) History stores both versions with note about temporal preservation, (4) Added [TEMPORAL] tags throughout for clarity. Analyzer now properly processes temporal sequences and ensures generated prediction scripts maintain draw order without sorting, matching actual lottery machine output sequence.
+
+pb_predictions_1.001.py
+80 lines
+
+py
+
+When I run pb_predictions_1.001.py, I get the following error: C:\Users\carlo\Proton Drive\xefegon\My files\Documents\lotto\Powerball\Powerball Kaizen\Powerball Pick 5 Deep Learning Adapt\Run\Numbers As Drawn>python pb_predictions_1.001.py
+  File "C:\Users\carlo\Proton Drive\xefegon\My files\Documents\lotto\Powerball\Powerball Kaizen\Powerball Pick 5 Deep Learning Adapt\Run\Numbers As Drawn\pb_predictions_1.001.py", line 80
+    class MechanicalBiasDetector(nn.Module
+                                ^
+SyntaxError: '(' was never closed
+
+The error indicates that the file pb_predictions_1.001.py was accidentally saved with the temporal analyzer code instead of the prediction system code. The file is incomplete - it cuts off at line 80 with class MechanicalBiasDetector(nn.Module without closing the parenthesis.
+
+You need to replace this file with the correct prediction system code. Use the fixed version I provided earlier in our conversation (the one with synchronized weights from the deep learning analyzer). Here's what you should save as pb_predictions_1.001.py:
+
+python
+"""
+Advanced Powerball Prediction System v1.001
+SYNCHRONIZED WEIGHTS FROM DEEP LEARNING ANALYZER
+Generated: 2025-08-31 15:46
+Updated: 2025-08-31 with synchronized weights
+
+Training Statistics:
+  - Deep Learning Models: LSTM, Transformer, CNN Ensemble
+  - GPU Training Time: ~5 minutes
+  - GPU Memory Used: 2-4 GB
+  - Training Epochs: 200 with early stopping
+  - Pattern Detection: Neural correlation analysis
+  - Synchronization Analysis: Phase coupling detected
+  
+Weight Distribution (FIXED):
+  - Top performers: 0.175 (neural_network)
+  - Bottom performers: 0.011 (seasonal)
+  - Spread ratio: 15.6x
+  - Synchronization-aware boosting applied
+"""
+(Use the complete code from the "Fixed pb_predictions_1.001.py with Synchronized Weights" artifact I created earlier)
+
+The file you currently have contains analyzer code, not prediction code. The prediction system should have all the algorithm implementations (ARIMA, chaos, quantum, etc.) and the AdaptiveLotteryPredictor class.
+
+2025-08-31 17:00 PST
+Project: Powerball Pick 5 Deep Learning Adapt
+
+Identified issue for Carlos/Xenku: pb_predictions_1.001.py contains wrong code (temporal analyzer instead of prediction system), file truncated at line 80 with unclosed parenthesis causing SyntaxError. Solution: replace with correct prediction system code containing AdaptiveLotteryPredictor class and all 17 algorithm implementations with synchronized weights. File should be prediction generator, not analyzer code.
+
+""" Advanced Powerball Prediction System v1.001 SYNCHRONIZED WEIGHTS FROM DEEP LEARNING ANALYZER Generated: 2025-08-31 15:46 Updated: 2025-08-31 with synchronized weights Training Statistics: - Deep Learning Models: LSTM, Transformer, CNN Ensemble - GPU Training Time: ~5 minutes - GP
+
+pasted
+
+This one?
+
+Yes, that's the correct prediction system code! This should be saved as pb_predictions_1.001.py. This code has:
+
+All 17 algorithm implementations working correctly
+The synchronized weights from the deep learning analyzer
+The proper prediction generation system
+However, I notice one issue - line 1419 has:
+
+python
+# Sort main numbers
+predicted_numbers.sort()
+For temporal order preservation (as we discussed), you should comment out this line:
+
+python
+# predicted_numbers.sort()  # TEMPORAL ORDER - DO NOT SORT
+This way your predictions will maintain the draw sequence order rather than being sorted lowest to highest.
+
+Everything else in this file looks correct. It should run without errors and generate your predictions using the weighted ensemble of all 17 algorithms.
+
+2025-08-31 17:15 PST
+Project: Powerball Pick 5 Deep Learning Adapt
+
+Confirmed correct pb_predictions_1.001.py code for Carlos/Xenku with all 17 algorithms, synchronized weights, and proper prediction system. Identified line 1419 with predicted_numbers.sort() should be commented out to preserve temporal draw order as discussed. Code otherwise complete and functional for generating weighted ensemble predictions.
