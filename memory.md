@@ -1250,5 +1250,8 @@ Project: Powerball Pick 5 Deep Learning Adapt
 
 Carlos/Xenku shared results from previous analyzer showing pattern strength 0.9909 (memorization as expected), performance scores [10,13,6,3,0], weight spread 15.6x with neural_network top (0.175) and seasonal bottom (0.011). GPU usage peaked at 0.99GB, training took ~45 minutes total. Preparing to rollback and run enhanced synchronization analyzer expecting 10-15min runtime, 3-5GB GPU usage, additional outputs for phase coupling, lagged correlations, entropy variation, coupling detector, and synchronization network. Will analyze whether positions show coupling/influence patterns beyond simple memorization.
 
+2025-01-27 13:45 PST
+Project: Powerball Pick 5 Deep Learning Adapt
 
+Carlos/Xenku's synchronization analyzer detecting significant coupling patterns. Strong phase locking found: N3-N4 (PLV=0.620), N2-N3 (0.577), N1-N2 (0.529), N4-N5 (0.526). N2 showing anomalous low pattern strength (0.0568) vs others (0.97+), suggesting independence or chaos injection role. Entropy variations consistent (0.13-0.15) across positions. Weak lagged correlations (max 0.060) indicate no strong future prediction. Low overall coupling strength (0.062). GPU memory climbing appropriately (1.14GB+), training times 10-13min per position. Synchronization adjustments working, reducing raw pattern scores to account for coupling effects.
 
