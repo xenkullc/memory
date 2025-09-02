@@ -5789,3 +5789,249 @@ Let me know when you want to revisit the cross-project integration or if you nee
 Project: Powerball Pick 5 Smart Picks
 
 Carlos/Xenku acknowledged cross-project insight gathering options as sound and reasonable but will maintain current setup for now. Current pb_performance_tracker.py v3.0 HYBRID remains robust with strict diversity enforcement (max 2 shared numbers), enhanced PB selection (80% duplicate skip rate), pattern-based scoring, and smart algorithm grouping. System ready for current cycle with 20,000 Smart Picks from subscription service. Cross-project integration options documented and available for future implementation when ready. Focus remains on analyzing subscription service picks for observable biases or patterns after this drawing cycle.
+
+This chat will be dedicated to Mega Millions Number Splitter project.
+
+I understand. This chat will be dedicated to the Mega Millions Number Splitter project.
+
+Based on our past work together, I know you've been working with lottery data splitting for both Powerball and Mega Millions systems. The splitter typically takes raw lottery data and separates it into individual position files (N1-N5 for main numbers and MB for Mega Ball).
+
+What specific aspect of the Mega Millions Number Splitter project would you like to work on? Are you:
+
+Creating a new splitter script for Mega Millions data?
+Modifying an existing splitter to handle a different data format?
+Implementing the "Numbers As Drawn" vs "Numbers In Order" distinction (similar to what we discussed for Powerball)?
+Fixing issues with a current splitter?
+Something else?
+Please share your Mega Millions data format or any existing splitter scripts you'd like me to review or enhance.
+
+2025-01-27 14:55 PST
+Project: Mega Millions Number Splitter
+
+Initiated dedicated session for Carlos/Xenku's Mega Millions Number Splitter project. Based on previous work, splitters typically parse lottery CSV data into individual position files (N1-N5, MB). Similar to Powerball work, may involve handling "Numbers As Drawn" vs "Numbers In Order" distinction for temporal vs sorted analysis. Ready to create, modify, or fix splitter scripts based on specific Mega Millions data format requirements.
+
+Of course\! Here is a well-structured prompt that you can provide to other AI chat models to generate the `mm_number_splitter.py` script based on your requirements. ----- Hello\! I need you to act as an expert Python developer. Your task is to modify an existing Python script that processes Po
+
+pasted
+
+I'll create the mm_number_splitter.py script based on your requirements. This will be a modified version of the Powerball splitter adapted for Mega Millions data.
+
+python
+#!/usr/bin/env python3
+"""
+MEGA MILLIONS SPLITTER WITH DEBUG OUTPUT
+=========================================
+Shows exactly what's happening during processing
+"""
+
+import pandas as pd
+import os
+from datetime import datetime
+
+def split_megamillions_debug(mode='both'):
+    """
+    Split Mega Millions CSV with detailed debug output
+    mode: 'drawn', 'order', or 'both'
+    """
+    
+    print("="*60)
+    print("MEGA MILLIONS SPLITTER - DEBUG VERSION")
+    print("="*60)
+    
+    # Find the file
+    input_file = 'megamillions-winning-numbers.csv'
+    if not os.path.exists(input_file):
+        print(f"ERROR: {input_file} not found in current directory")
+        return
+    
+    print(f"Found: {input_file}")
+    
+    # Read the CSV
+    try:
+        df = pd.read_csv(input_file, encoding='utf-8')
+        print(f"Successfully read {len(df)} rows")
+        print(f"Columns: {list(df.columns)[:4]}")  # Show first 4 columns
+    except Exception as e:
+        print(f"ERROR reading CSV: {e}")
+        return
+    
+    # Process Numbers As Drawn
+    if mode in ['drawn', 'both']:
+        print("\n" + "-"*60)
+        print("PROCESSING NUMBERS AS DRAWN")
+        print("-"*60)
+        
+        output_dir = 'data_as_drawn'
+        if not os.path.exists(output_dir):
+            os.makedirs(output_dir)
+            print(f"Created directory: {output_dir}")
+        
+        n1, n2, n3, n4, n5 = [], [], [], [], []
+        valid = 0
+        
+        for idx, row in df.iterrows():
+            if idx < 3:  # Debug first 3 rows
+                print(f"Row {idx}: {row['Numbers As Drawn']}")
+            
+            drawn = str(row['Numbers As Drawn'])
+            if '--' in drawn:
+                nums = drawn.split('--')
+                try:
+                    nums = [int(n.strip()) for n in nums]  # Added strip() to handle spaces
+                    if len(nums) == 5:
+                        n1.append(nums[0])
+                        n2.append(nums[1])
+                        n3.append(nums[2])
+                        n4.append(nums[3])
+                        n5.append(nums[4])
+                        valid += 1
+                except:
+                    pass
+        
+        print(f"Parsed {valid} valid rows")
+        
+        # Reverse for chronological order
+        print("Reversing to chronological order...")
+        n1.reverse()
+        n2.reverse()
+        n3.reverse()
+        n4.reverse()
+        n5.reverse()
+        
+        # Save files
+        positions = [n1, n2, n3, n4, n5]
+        for i, data in enumerate(positions, 1):
+            filename = os.path.join(output_dir, f'N{i}.csv')
+            pd.Series(data).to_csv(filename, index=False, header=False)
+            print(f"Created: {filename} with {len(data)} numbers")
+        
+        # Save MB (Mega Ball)
+        mb_data = df['MB'].head(valid).tolist()
+        mb_data.reverse()
+        mb_filename = os.path.join(output_dir, 'MB.csv')
+        pd.Series(mb_data).to_csv(mb_filename, index=False, header=False)
+        print(f"Created: {mb_filename} with {len(mb_data)} numbers")
+    
+    # Process Numbers In Order
+    if mode in ['order', 'both']:
+        print("\n" + "-"*60)
+        print("PROCESSING NUMBERS IN ORDER")
+        print("-"*60)
+        
+        output_dir = 'data_in_order'
+        if not os.path.exists(output_dir):
+            os.makedirs(output_dir)
+            print(f"Created directory: {output_dir}")
+        
+        n1, n2, n3, n4, n5 = [], [], [], [], []
+        valid = 0
+        
+        for idx, row in df.iterrows():
+            if idx < 3:  # Debug first 3 rows
+                print(f"Row {idx}: {row['Numbers In Order']}")
+            
+            ordered = str(row['Numbers In Order'])
+            if '--' in ordered:
+                nums = ordered.split('--')
+                try:
+                    nums = [int(n.strip()) for n in nums]  # Added strip() to handle spaces
+                    if len(nums) == 5:
+                        n1.append(nums[0])
+                        n2.append(nums[1])
+                        n3.append(nums[2])
+                        n4.append(nums[3])
+                        n5.append(nums[4])
+                        valid += 1
+                except:
+                    pass
+        
+        print(f"Parsed {valid} valid rows")
+        
+        # Reverse for chronological order
+        print("Reversing to chronological order...")
+        n1.reverse()
+        n2.reverse()
+        n3.reverse()
+        n4.reverse()
+        n5.reverse()
+        
+        # Save files
+        positions = [n1, n2, n3, n4, n5]
+        for i, data in enumerate(positions, 1):
+            filename = os.path.join(output_dir, f'N{i}.csv')
+            pd.Series(data).to_csv(filename, index=False, header=False)
+            print(f"Created: {filename} with {len(data)} numbers")
+        
+        # Save MB (Mega Ball)
+        mb_data = df['MB'].head(valid).tolist()
+        mb_data.reverse()
+        mb_filename = os.path.join(output_dir, 'MB.csv')
+        pd.Series(mb_data).to_csv(mb_filename, index=False, header=False)
+        print(f"Created: {mb_filename} with {len(mb_data)} numbers")
+    
+    print("\n" + "="*60)
+    print("COMPLETE!")
+    print("="*60)
+    
+    # Verify files
+    print("\nVerifying output files:")
+    for dir_name in ['data_as_drawn', 'data_in_order']:
+        if os.path.exists(dir_name):
+            print(f"\n{dir_name}:")
+            for file in os.listdir(dir_name):
+                filepath = os.path.join(dir_name, file)
+                with open(filepath, 'r') as f:
+                    lines = f.readlines()
+                print(f"  {file}: {len(lines)} rows")
+                if lines:
+                    print(f"    First: {lines[0].strip()}, Last: {lines[-1].strip()}")
+
+if __name__ == "__main__":
+    split_megamillions_debug('both')
+The key changes made to adapt the script for Mega Millions:
+
+Input filename: Changed from powerball-winning-numbers.csv to megamillions-winning-numbers.csv
+Function name: Changed from split_powerball_debug to split_megamillions_debug
+Title: Changed from "POWERBALL SPLITTER" to "MEGA MILLIONS SPLITTER"
+Special ball column: Changed from 'PB' to 'MB' (Mega Ball)
+Output filename: Changed from PB.csv to MB.csv
+Added .strip(): To handle spaces around the numbers in the delimiter (e.g., ' -- ' instead of '--')
+The script will:
+
+Process both "Numbers As Drawn" (temporal sequence) and "Numbers In Order" (sorted)
+Create two directories: data_as_drawn and data_in_order
+Generate N1.csv through N5.csv and MB.csv in each directory
+Reverse the data to chronological order (oldest to newest)
+Provide debug output showing processing status
+To use it, place your megamillions-winning-numbers.csv file in the same directory as the script and run:
+
+bash
+python mm_number_splitter.py
+2025-01-27 15:00 PST
+Project: Mega Millions Number Splitter
+
+Created mm_number_splitter.py for Carlos/Xenku based on pb_number_splitter.py template. Modified for Mega Millions: changed input file to megamillions-winning-numbers.csv, function to split_megamillions_debug, title to "MEGA MILLIONS SPLITTER", special ball from PB to MB, output from PB.csv to MB.csv. Added .strip() to handle spaces in delimiter (' -- '). Script processes both "Numbers As Drawn" and "Numbers In Order", creates separate directories, reverses to chronological order, and provides debug output. Maintains identical functionality to Powerball version while adapting for Mega Millions specific format.
+Thank you, that worked out perfectly!
+
+Excellent! I'm glad the mm_number_splitter.py script worked perfectly for you. The script successfully:
+
+Read your megamillions-winning-numbers.csv file
+Parsed both "Numbers As Drawn" and "Numbers In Order" columns
+Created the two directories with all the position files (N1-N5 and MB)
+Handled the space-padded delimiters correctly
+Reversed the data to chronological order
+Now you have your Mega Millions data properly split and ready for analysis, just like your Powerball setup. You can use these files with your Mega Millions prediction systems for either:
+
+data_as_drawn: Temporal sequence analysis (actual draw order from the machine)
+data_in_order: Sorted number analysis (mathematical relationships)
+Is there anything else you'd like to do with the Mega Millions Number Splitter project, such as:
+
+Adding additional validation or statistics?
+Creating a combined splitter that can handle both Powerball and Mega Millions?
+Implementing any specific data transformations?
+2025-01-27 15:05 PST
+Project: Mega Millions Number Splitter
+
+Successfully completed mm_number_splitter.py implementation for Carlos/Xenku. Script confirmed working perfectly - reading megamillions-winning-numbers.csv, parsing both column types, creating directories with position files (N1-N5, MB), handling space-padded delimiters, and reversing to chronological order. Data now properly split for both temporal sequence (data_as_drawn) and sorted (data_in_order) analysis, matching Powerball setup functionality. Project objective achieved.
+
+
